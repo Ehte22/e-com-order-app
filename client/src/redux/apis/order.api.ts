@@ -1,0 +1,102 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { IOrder } from "../../models/order.interface"
+
+export const orderApi = createApi({
+    reducerPath: "orderApi",
+    baseQuery: fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include" }),
+    tagTypes: ["order"],
+    endpoints: (builder) => {
+        return {
+            getOrders: builder.query<IOrder[], void>({
+                query: () => {
+                    return {
+                        url: "/",
+                        method: "GET"
+                    }
+                },
+                transformResponse: (data: { message: string, result: IOrder[] }) => {
+                    return data.result
+                },
+                transformErrorResponse: (error: { status: number, data: { message: string } }) => {
+                    return error.data.message
+                },
+                providesTags: ["order"]
+            }),
+
+            addOrder: builder.mutation<string, string>({
+                query: cartItemData => {
+                    return {
+                        url: "/add-order",
+                        method: "POST",
+                        body: cartItemData
+                    }
+                },
+                transformResponse: (data: { message: string }) => {
+                    return data.message
+                },
+                transformErrorResponse: (error: { status: number, data: { message: string } }) => {
+                    return error.data.message
+                },
+                invalidatesTags: ["order"]
+            }),
+
+            updateOrderStatus: builder.mutation<string, { id: string, statusData: { status: string, returnStatus: string } }>({
+                query: ({ id, statusData }) => {
+                    return {
+                        url: `/update-status/${id}`,
+                        method: "PUT",
+                        body: statusData
+                    }
+                },
+                transformResponse: (data: { message: string }) => {
+                    return data.message
+                },
+                transformErrorResponse: (error: { status: number, data: { message: string } }) => {
+                    return error.data.message
+                },
+                invalidatesTags: ["order"]
+            }),
+
+            cancelOrder: builder.mutation<string, string>({
+                query: (id) => {
+                    return {
+                        url: `/cancel-order/${id}`,
+                        method: "PUT",
+                    }
+                },
+                transformResponse: (data: { message: string }) => {
+                    return data.message
+                },
+                transformErrorResponse: (error: { status: number, data: { message: string } }) => {
+                    return error.data.message
+                },
+                invalidatesTags: ["order"]
+            }),
+
+            returnOrderRequested: builder.mutation<string, { id: string, returnReason: string }>({
+                query: ({ id, returnReason }) => {
+                    return {
+                        url: `/return-order/${id}`,
+                        method: "PUT",
+                        body: { returnReason }
+                    }
+                },
+                transformResponse: (data: { message: string }) => {
+                    return data.message
+                },
+                transformErrorResponse: (error: { status: number, data: { message: string } }) => {
+                    return error.data.message
+                },
+                invalidatesTags: ["order"]
+            }),
+        }
+    }
+})
+
+export const {
+    useGetOrdersQuery,
+    useAddOrderMutation,
+    useUpdateOrderStatusMutation,
+    useCancelOrderMutation,
+    useReturnOrderRequestedMutation
+} = orderApi
