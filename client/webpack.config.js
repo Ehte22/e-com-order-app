@@ -13,6 +13,7 @@ module.exports = (_, argv) => ({
     publicPath: "https://e-com-order-app-client.vercel.app/",
   },
 
+
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
