@@ -3,6 +3,7 @@ import { IOrder } from "../../models/order.interface"
 
 export const orderApi = createApi({
     reducerPath: "orderApi",
+    // baseQuery: fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include" }),
     baseQuery: fetchBaseQuery({ baseUrl: `https://e-com-order-app-server.vercel.app/api/v1/order`, credentials: "include" }),
     tagTypes: ["order"],
     endpoints: (builder) => {
