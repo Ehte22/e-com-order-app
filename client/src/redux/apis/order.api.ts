@@ -4,8 +4,8 @@ import { IOrder } from "../../models/order.interface"
 export const orderApi = createApi({
     reducerPath: "orderApi",
     baseQuery: fetchBaseQuery({
-        // baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
-        baseUrl: `$https://e-com-order-app-server.vercel.app/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
+        baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
+            // baseUrl: `$https://e-com-order-app-server.vercel.app/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
             const state = getState() as any
             const token = state.auth.user?.token
             if (token) {
