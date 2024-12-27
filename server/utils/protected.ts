@@ -7,10 +7,9 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export const protectedRoute = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    console.log("cookies", req.cookies.user);
 
-    if (!req.cookies.user) {
-        return res.status(404).json({ message: "No cookie found" })
+    if (!req.headers.authorization) {
+        return res.status(404).json({ message: "No token found" })
     }
 
     const JWT_KEY = process.env.JWT_KEY

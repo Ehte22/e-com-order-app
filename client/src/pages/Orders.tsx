@@ -3,7 +3,7 @@ import { useCancelOrderMutation, useGetOrdersQuery, useReturnOrderRequestedMutat
 import { toast } from '../services/toast'
 
 const Orders = () => {
-    const { data } = useGetOrdersQuery()
+    const { data } = useGetOrdersQuery({ fetchAllOrders: false })
     const [cancelOrder, { data: cancelOrderMessage, isSuccess }] = useCancelOrderMutation()
     const [returnOrder, { data: returnMessage, isSuccess: isReturnRequestSuccess }] = useReturnOrderRequestedMutation()
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

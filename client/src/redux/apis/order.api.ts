@@ -3,16 +3,27 @@ import { IOrder } from "../../models/order.interface"
 
 export const orderApi = createApi({
     reducerPath: "orderApi",
-    // baseQuery: fetchBaseQuery({ baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include" }),
-    baseQuery: fetchBaseQuery({ baseUrl: `https://e-com-order-app-server.vercel.app/api/v1/order`, credentials: "include" }),
+    baseQuery: fetchBaseQuery({
+        // baseUrl: `${process.env.BASE_URL}/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
+        baseUrl: `$https://e-com-order-app-server.vercel.app/api/v1/order`, credentials: "include", prepareHeaders(headers, { getState }) {
+            const state = getState() as any
+            const token = state.auth.user?.token
+            if (token) {
+                headers.set("Authorization", `Bearer ${token}`);
+            }
+
+            return headers;
+        },
+    }),
     tagTypes: ["order"],
     endpoints: (builder) => {
         return {
-            getOrders: builder.query<IOrder[], void>({
-                query: () => {
+            getOrders: builder.query<IOrder[], { fetchAllOrders: boolean }>({
+                query: (queryParams) => {
                     return {
                         url: "/",
-                        method: "GET"
+                        method: "GET",
+                        params: queryParams
                     }
                 },
                 transformResponse: (data: { message: string, result: IOrder[] }) => {

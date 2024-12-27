@@ -7,7 +7,14 @@ import { channel, PRODUCT_REQUEST, PRODUCT_RESPONSE } from "../services/rabbitMQ
 import { generateCorrelationId } from "../utils/correlationId"
 
 export const getOrders = asyncHandler(async (req: Request, res: Response): Promise<any> => {
-    const orders = await Order.find({ userId: req.body.userId }).lean()
+    const { fetchAllOrders } = req.query
+
+    let orders
+    if (fetchAllOrders === "true") {
+        orders = await Order.find().lean()
+    } else {
+        orders = await Order.find({ userId: req.body.userId }).lean()
+    }
 
     if (!orders.length) {
         return res.status(200).json({ message: "No orders found", result: [] });

@@ -13,7 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "https://e-com-main-app.vercel.app",
+    origin: true,
     credentials: true
 }));
 app.use(cookieParser())
@@ -37,7 +37,7 @@ mongoose.connect(process.env.MONGO_URL || "").catch((err) => {
 });
 
 // Start the Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 mongoose.connection.once("open", async () => {
     console.log("MongoDb Connected");
 
